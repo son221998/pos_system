@@ -1,0 +1,11 @@
+SELECT
+  products.id,
+  products.name,
+  uoms.name,
+  product_uoms.unit_cost,
+  product_uoms.sell_price,
+  product_uoms.discount
+FROM
+  product_uoms
+  INNER JOIN products ON product_uoms.product_id = products.id
+  INNER JOIN uoms ON product_uoms.uom_id = uoms.id
