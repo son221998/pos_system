@@ -11,12 +11,12 @@ class Uom extends Model
     use HasFactory;
     protected $table ='uoms';
     protected $primaryKey = 'id';
-    Protected $fillable = [
+    protected $fillable = [
         'id',
         'name',
     ];
 
     public function products() {
-        return $this->hasMany(Product::class, 'uom_id', 'id');
+        return $this->belongsTo(Uom::class);
     }
 }

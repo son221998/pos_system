@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\ProductController;
 use App\Models\Product;
 use App\Models\Uom;
+use App\Models\ProductUom;
 
 
 class ProductController extends Controller
@@ -18,7 +19,8 @@ class ProductController extends Controller
     {
         $products = Product::paginate(6);
         $uoms = Uom::paginate(3);
-        return view('products.index', ['product'=>$products, 'uom'=>$uoms]);
+        $product_uoms = ProductUom::where('unit_cost', 'sell_price', 'discount');
+        return view('products.index', ['products' => $products,'uoms' => $uoms, 'product_uoms' => $product_uoms]);
         
     }
 
@@ -53,11 +55,11 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        $product = Product::find($id);
-        if(!$product){
+        $products = Product::find($id);
+        if(!$products){
             abort(404);
         }
-        return view('products.show')->with('products', $product);
+        return view('products.show')->with('products', $products);
     }
 
     /**
@@ -65,11 +67,11 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        $product = Product::find($id);
-        if(!$product){
+        $products = Product::find($id);
+        if(!$products){
             abort(404);
         }
-        return view('products.edit')->with('products', $product);
+        return view('products.edit')->with('products', $products);
     }
 
     /**
@@ -79,7 +81,7 @@ class ProductController extends Controller
     {
         $products = Product::find($id);
         $input = $request->all();
-        $product->update($input);
+        $products->update($input);
         return redirect('product')->with('flash_message', 'Product Updated!'); 
 
     }
@@ -89,17 +91,20 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        $product = Product::find($id);
-        if (!$product) {
+        $products = Product::find($id);
+        if (!$products) {
             abort(404);
         }
-        $product->delete();
+        $products->delete();
         return redirect('product')->with('flash_message', 'Product Deleted!'); 
     }
     public function search(Request $request)
     {
+        
+        
         $search_text = $_GET['query'];
-        $products = Product::where('name', 'LIKE', '%' . $search_text . '%')->get();
-        return view('search_results', ['results' => $products]);
+        $products = Product::where('name', 'product_code', '%' . $search_text . '%')->with('products')->get();
+        return view('products.search', ['products'=>$products]);
+        
     }
 }

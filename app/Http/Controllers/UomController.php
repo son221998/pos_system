@@ -12,7 +12,7 @@ class UomController extends Controller
      */
     public function index()
     {
-        $uoms = Uoms::paginate(6);
+        $uoms = Uoms::paginate(2);
         return view('products.index', ['uom'=>$uoms]);
         
     }

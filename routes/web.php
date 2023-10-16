@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,18 +18,18 @@ use App\Http\Controllers\Controller;
 */
 
 Route::get('/', function () {
-    return view('product');
+    return view('welcome');
 });
 
 Route::get('/', function () {
     $products = Product::all('products')->get();
-    return view('product', [
-        'products' => $products
-    ]);
+    return view('product', ['product' => $product]);
 });
 
-Route::resource('/products', ProductController::class);
-Route::get('/search', [App\Http\Controllers\ProductController::class, 'search'])->name('search');
+Route::resource('/product', ProductController::class);
+
+// Route::get('/search', 'ProductController@search');
+Route::get('/search', [ProductController::class, 'search']);
 Route::get('/product', [ProductController::class,'index']);
 
 
