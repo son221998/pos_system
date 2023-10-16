@@ -1,20 +1,65 @@
 @extends('products.layout')
 @section('content')
-
-<div class="card" style="margin:20px;">
-    <div class="card-header">Product Page</div>
-    <div class="card-body">
-        <div class="card-body">
-            <h5 class="card-title">Name: {{$products->name}}</h5>
-            <p class="card-text">Product Code: {{$products->product_code}}</p>
-            <p class="card-text">UOM: {{$products->uoms}}</p>
-            <p class="card-text">Description: {{$products->description}}</p>
-            <p class="card-text">Unit Cost: {{$products->unit_cost}}</p>
-            <p class="card-text">Sell Price: {{$products->sell_price}}</p>
-            <p class="card-text">Discount: {{$products->discount}}</p>
-        </div>
+<div class="container">
+    <div class="row" class="col-6" style="margin:20px;">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <table class="row" class="col-12">
+                        <h4>Product Information</h4>
+                        <form action="{{url('/search')}}" method="$GET" class="form-inline">
+                            <div class="input-group form-group-lg has-feedback" class="">
+                                <div class="form-outline">
+                                    <input type="text" class="form-control mr-bg-2" name="query" placeholder="Search" aria-label="Search" id="search" aria-describedby="search-addon">
+                                </div>
+                            </div>
+                        </form>  
+                    </table>
+                    <div>
+                        <div class="table-responsive"> 
+                            <table class="table">
+                                <thead class="bg-primary text-light">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Product Code</th>
+                                        <th>UOM</th>
+                                        <th>Description</th>
+                                        <th>Unit Cost</th>
+                                        <th>Sell Price</th>
+                                        <th>Discount</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($products as $item)
+                                        <tr class="">
+                                            <td>{{$item->id}}</td>
+                                            <td>{{$item->name}}</td>
+                                            <td>{{$item->product_code}}</td>
+                                            <td>{{$item->uom}}</td>
+                                            <td>{{$item->description}}</td>
+                                            <td>{{$item->unit_cost}}</td>
+                                            <td>{{$item->sell_price}}</td>
+                                            <td>{{$item->discount}}</td>
+                                            <td>
+                                                <a href="{{url('/product/' . $item->id)}}" title="View Product"><button class="btn btn-primary btn-sm"><i class="fa-regular fa-eye" aria-hidden="true"></i></button></a>
+                                                <a href="{{url('/product/' . $item->id . '/edit')}}" title="Edit Product"><button class="btn btn-success btn-sm"><i class="fa fa-pencil" aria-hidden="true"></i></button></a>
+                                            <form method="POST" action="{{url('/product' . '/' . $item->id)}}" accept-charset="UTF-8" style="display:inline">
+                                                {{method_field('DELETE')}}
+                                                {{csrf_field()}}
+                                                <button type="submit" class="btn btn-danger btn-sm" title="Delete Product" onclick="return confirm("Confirm Delete?")"><i class="fa fa-trash-can" aria-hidden="true"></i></button>
+                                            </form>
+                                            </td>
+                                        </tr>                                
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>  
     </div>
 </div>
-
-
 @endsection()

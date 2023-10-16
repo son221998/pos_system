@@ -1,17 +1,16 @@
 @extends('products.layout')
 @section('content')
-
 <div class="container">
     <div class="row" class="col-6" style="margin:20px;">
         <div class="col-12">
             <div class="card">
-                <div class="card-body"
-                    <table class="row" class="col-6">
+                <div class="card-body">
+                    <table class="row" class="col-12">
                         <h4 >Product Information</h4>
-                        <form action="{{route('search')}}" method="$_GET" class="form-inline">
+                        <form action="{{url('/search/')}}"  method="$GET" class="form-inline">
                             <div class="input-group form-group-lg has-feedback" class="">
                                 <div class="form-outline">
-                                    <input type="text" class="form-control mr-sm-2" name="searchTerm" placeholder="Search" aria-label="Search" id="search" aria-describedby="search-addon">
+                                    <input type="text" class="form-control mr-bg-2" name="query" placeholder="Search" aria-label="Search" id="search" aria-describedby="search-addon">
                                 </div>
                             </div>
                         </form>  
@@ -33,19 +32,19 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($product as $item)
+                                @foreach($products as $item)
                                     <tr class="products">
                                         <td>{{$item->id}}</td>
                                         <td>{{$item->name}}</td>
                                         <td>{{$item->product_code}}</td>
-                                        <td>{{$item->uom}}</td>
+                                        <td>
                                         <td>{{$item->description}}</td>
                                         <td>{{$item->unit_cost}}</td>
                                         <td>{{$item->sell_price}}</td>
                                         <td>{{$item->discount}}</td>
                                         <td>
                                             <a href="{{url('/product/' . $item->id)}}" title="View Product"><button class="btn btn-primary btn-sm"><i class="fa-regular fa-eye" aria-hidden="true"></i></button></a>
-                                            <a href="{{url('/product/' . $item->id)}}" title="Edit Product"><button class="btn btn-success btn-sm"><i class="fa fa-pencil" aria-hidden="true"></i></button></a>
+                                            <a href="{{url('/product/' . $item->id . '/edit')}}" title="Edit Product"><button class="btn btn-success btn-sm"><i class="fa fa-pencil" aria-hidden="true"></i></button></a>
                                         <form method="POST" action="{{url('/product' . '/' . $item->id)}}" accept-charset="UTF-8" style="display:inline">
                                             {{method_field('DELETE')}}
                                             {{csrf_field()}}
@@ -91,12 +90,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            @foreach($uom as $uoms)
+                            @foreach($uoms as $uom)
                                 <tr class="product">
-                                    <td>{{$uoms->id}}</td>
+                                    <td>{{$uom->id}}</td>
                                     <td></td>
                                     <td></td>
-                                    <td>{{$uoms->name}}</td>
+                                    <td>{{$uom->name}}</td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -114,19 +113,16 @@
                                             {{csrf_field()}}
                                             <button type="submit" class="btn btn-danger btn-sm" title="Delete Product" onclick="return confirm("Confirm Delete?")"><i class="fa fa-trash-can" aria-hidden="true"></i></button>
                                         </form>                       
-                                    </td> 
-                                  
+                                    </td>                               
                                 </tr>                      
-                                @endforeach
-                                    
+                                @endforeach                                 
                             </tbody>
                         </table>
-                            <span class="">{{$product->links()}}</span>
-                    </div>
-                    
+                            <span class="">{{$products->links()}}</span>
+                    </div>          
                 </div>
             </div>
         </div>
     </div>
 </div>
-    @endsection()
+@endsection
